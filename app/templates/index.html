@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+  <h4>
+  Hello,
+  {% if current_user.is_authenticated %}
+
+    {{ current_user.username }}
+
+  {% else %}
+
+    Stranger
+
+  {% endif %}!
+  </h4>
+{% endblock page_content %}

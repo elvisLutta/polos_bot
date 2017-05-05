@@ -4,6 +4,6 @@ from . import main
 from .. import db
 
 
-@main.route('/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET'])
 def index():
-    pass
+    return render_template('index.html')
