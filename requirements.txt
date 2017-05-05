@@ -1,8 +1,33 @@
-Fabric
-Flask-SQLAlchemy
-Flask-WTF
-WTForms
-coverage
-# ecdsa
-# paramiko
-# pycrypto
+alembic==0.9.1
+appdirs==1.4.3
+asn1crypto==0.22.0
+cffi==1.10.0
+click==6.7
+coverage==4.3.4
+cryptography==1.8.1
+enum34==1.1.6
+Fabric==1.13.1
+Flask==0.12.1
+Flask-Migrate==2.0.3
+Flask-Script==2.0.5
+Flask-SQLAlchemy==2.2
+Flask-WTF==0.14.2
+idna==2.5
+ipaddress==1.0.18
+itsdangerous==0.24
+Jinja2==2.9.6
+Mako==1.0.6
+MarkupSafe==1.0
+packaging==16.8
+paramiko==2.1.2
+psycopg2==2.7.1
+pyasn1==0.2.3
+pycparser==2.17
+pyOpenSSL==17.0.0
+pyparsing==2.2.0
+python-editor==1.0.3
+requests==2.13.0
+six==1.10.0
+SQLAlchemy==1.1.9
+Werkzeug==0.12.1
+WTForms==2.1
