@@ -5,7 +5,11 @@ from flask_mail import Mail
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 from config import config
+from keys import set_env_vars
 
+
+# set env variables to be used
+set_env_vars()
 
 bootstrap = Bootstrap()
 mail = Mail()

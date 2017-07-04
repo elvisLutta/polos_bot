@@ -1,9 +1,15 @@
 {% extends "bootstrap/base.html" %}
-{% block title %}Polos{% endblock title %}
+{% block head %}
+
+  {{ super() }}
+
+  <title>Elvis Lutta</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock head %}
 
 {% block navbar %}
 
-  <div class="navbar navbar-inverse" role="navigation">
+  <div class="navbar fixed-top navbar-inverse" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -51,4 +57,10 @@
     {% endblock page_content %}
   </div>
 {% endblock content %}
+
+{% block footer %}
+  <nav class="navbar fixed-bottom navbar-light bg-faded">
+    <a class="navbar-brand" href="#">Fixed bottom</a>
+  </nav>
+{% endblock footer %}
 

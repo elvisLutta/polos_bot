@@ -7,6 +7,51 @@ from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
 
+class Permission:
+    '''Specify permissions in hex which allow or deny users certain actions.
+    Each bit represents a certain permission.'''
+    FOLLOW = 0x01
+    COMMENT = 0X02
+    WRITE_ARTICLES = 0X04
+    MODERATE_COMMENTS = 0X08
+    ADMINISTER = 0x80
+
+
+class Role(db.Model):
+    '''Store user roles in db with availability of extensions for other types
+    roles in future. Each role allows a user to perform certain activities.'''
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    default = db.Column(db.Boolean, default=False, index=True)
+    permissions = db.Column(db.Integer)
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'User': (Permission.FOLLOW |
+                     Permission.COMMENT |
+                     Permission.WRITE_ARTICLES, True),
+            'Moderator': (Permission.FOLLOW |
+                     Permission.COMMENT |
+                     Permission.WRITE_ARTICLES |
+                     Permission.MODERATE_COMMENTS, True),
+            'Administrator': (0xff, False) # Admin gets all permissions default
+        }
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+            role.permissions = roles[r][0]
+            role.default = roles[r][1]
+            db.session.add(role)
+        db.session.commit()
+
+    def __repr__(self):
+        return '<Role %r>' % self.name
+
+
 class User(UserMixin, db.Model):
     '''Basic user information. User is linked to many other models so it's
     important to make it available for extension. This is one of the primary
@@ -16,6 +61,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), unique=True, index=True)
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     confirmed = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(64))
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
@@ -49,6 +95,11 @@ class User(UserMixin, db.Model):
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
+        if self.role_id is None:
+            if self.email == current_app.config['SITE_ADMIN']:
+                self.role_id = Role.query.filter_by(permisions=0xff).first().id
+            if self.role_id is None:
+                self.role_id = Role.query.filter_by(default=True).first().id
 
     @property
     def password(self):

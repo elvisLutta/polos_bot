@@ -7,3 +7,4 @@ venv
 ssl_cert/
 *.sqlite
 keys.*
+.ssh/
