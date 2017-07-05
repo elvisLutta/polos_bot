@@ -1,13 +1,14 @@
 import os
+from keys import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, SEC_KEY, SITE_ADMIN
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    SECRET_KEY = os.environ.get('SECRET_KEY') or SEC_KEY
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     POLOS_MAIL_SUBJECT_PREFIX = '[POLOS]'
     POLOS_MAIL_SENDER = 'Polos Admin <polos@example.com>'
-    POLOS_ADMIN = os.environ.get('SITE_ADMIN')
+    SITE_ADMIN = os.environ.get('SITE_ADMIN') or SITE_ADMIN
 
     @staticmethod
     def init_app(app):
@@ -35,7 +36,6 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or\
         'postgresql://' + DB_USER + ':' + DB_PASS + '@' + DB_HOST + \
         ':' + str(DB_PORT) + '/' + DB_NAME

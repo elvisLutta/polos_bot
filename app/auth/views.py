@@ -42,7 +42,7 @@ def register():
             db.session.commit()
             flash('You can now login.')
 
-        except (AttributeError, DetachedInstanceError, IntegrityError, MultipleResultsFound) as e:
+        except (AttributeError, DetachedInstanceError, IntegrityError, MultipleResultsFound, Exception) as e:
             db.session.rollback()
             flash('Something happened try again.')
 

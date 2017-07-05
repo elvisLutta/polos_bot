@@ -6,6 +6,8 @@ from flask import current_app, request
 from flask_login import UserMixin, AnonymousUserMixin
 from . import db, login_manager
 
+from keys import SITE_ADMIN
+
 
 class Permission:
     '''Specify permissions in hex which allow or deny users certain actions.
@@ -96,7 +98,7 @@ class User(UserMixin, db.Model):
             self.avatar_hash = hashlib.md5(
                 self.email.encode('utf-8')).hexdigest()
         if self.role_id is None:
-            if self.email == current_app.config['SITE_ADMIN']:
+            if self.email == (current_app.config['SITE_ADMIN'] or SITE_ADMIN):
                 self.role_id = Role.query.filter_by(permisions=0xff).first().id
             if self.role_id is None:
                 self.role_id = Role.query.filter_by(default=True).first().id

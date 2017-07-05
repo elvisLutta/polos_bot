@@ -15,7 +15,7 @@ def make_shell_context():
     return dict(app=app, db=db, User=User)
 
 
-manager.add_command("shell", Shell(make_context=make_shell_context))
+manager.add_command("Shell", Shell(make_context=make_shell_context))
 manager.add_command('db', MigrateCommand)
 manager.add_command('runserver', Server())
 
@@ -29,3 +29,8 @@ def test():
 
 if __name__ == '__main__':
     manager.run()
+    from keys import set_env_vars
+
+
+    # set env variables to be used
+    set_env_vars()
