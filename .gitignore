@@ -8,3 +8,8 @@ ssl_cert/
 *.sqlite
 keys.*
 .ssh/
+hosts
+group_vars/
+nginx_ssl.conf.j2
+deploy.yml
+deploy_prod.sh

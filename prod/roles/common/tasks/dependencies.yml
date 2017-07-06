@@ -1,0 +1,28 @@
+---
+- name: create virtualenv directory if it does not already exist
+  file: path={{ venv_dir }} state=directory
+  become_user: {{ deploy_user }}
+
+- name: create logs directory if it doesn't already exist
+  file: path={{ app_dir }}/logs state=directory
+  become_user: {{ deploy_user }}
+
+- name: install dependencies into a new virtualenv
+  pip: requirements={{ app_dir }}/requirements.txt virtualenv={{ venv_dir }}
+  become_user: {{ deploy_user }}
+
+- name: create .env file in base directory of the app from template
+  template: src=env.j2 dest={{ app_dir }}/.env
+  become_user: {{ deploy_user }}
+
+- name: initialize the database tables between Flask and PostgreSQL
+  shell: ". {{ app_dir }}/.env; {{ venv_python }} {{ app_dir }}/manage.py db init"
+
+- name: initialize the database tables between Flask and PostgreSQL
+  shell: ". {{ app_dir }}/.env; {{ venv_python }} {{ app_dir }}/manage.py db migrate"
+
+- name: initialize the database tables between Flask and PostgreSQL
+  shell: ". {{ app_dir }}/.env; {{ venv_python }} {{ app_dir }}/manage.py db upgrade"
+
+# - name: create the initial admin user in the database
+#   shell: ". {{ app_dir }}/.env; {{ venv_python }} {{ app_dir}}/manage.py create_wizard {{ app_admin_user }} {{ app_admin_password }}"
