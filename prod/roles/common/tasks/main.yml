@@ -12,7 +12,7 @@
 
 - include: dependencies.yml
 
-- include: postgresql.yml
+- include: postgres.yml
 
 - include: wsgi.yml
 

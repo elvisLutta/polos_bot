@@ -13,3 +13,5 @@ group_vars/
 nginx_ssl.conf.j2
 deploy.yml
 deploy_prod.sh
+ansible.cfg
+deploy.retry

@@ -5,14 +5,14 @@
 - name: add postgres repository
   apt_repository:
     repo: 'deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main'
-  become_user: {{ deploy_user }}
+  become: true
 
 - name: update packaging lists
   shell: 'wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -'
 
 - name: ensure postgresql database packages are installed
   apt: name={{item}} allow_unauthenticated=yes
-  become_user: {{ deploy_user }}
+  become: true
   with_items:
     - postgresql-9.6
     - postgresql-contrib
@@ -23,11 +23,11 @@
 
 - name: ensure database is created
   postgresql_db: name={{ app_name }}
-  become_user: postgres
+  become: postgres
 
 
 - name: configure seperate PostgreSQL user
   postgresql_user: db={{ app_name }} name={{ db_user }}
                    password={{ db_password }} priv=ALL
                    role_attr_flags=NOSUPERUSER
-  become_user: postgres
+  become: postgres

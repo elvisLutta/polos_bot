@@ -4,22 +4,22 @@
 ---
 - name: ensure Supervisor is installed via the system package
   apt: name=supervisor state=present update_cache=yes
-  become_user: {{ deploy_user }}
+  become: true
 
 - name: create Supervisor template for the WSGI app to run
   template: src=supervisor_app.conf.j2
             dest=/etc/supervisor/conf.d/{{ app_name }}.conf
-  become_user: {{ deploy_user }}
+  become: true
 
 - name: stop supervisor for app
   command: service supervisor stop
-  become_user: {{ deploy_user }}
+  become: true
 
 - name: pause for restart to take effect
   pause: seconds=2
 
 - name: start supervisor for app
   command: service supervisor start
-  become_user: {{ deploy_user }}
-    notify:
+  become: true
+  notify:
     - restart nginx
